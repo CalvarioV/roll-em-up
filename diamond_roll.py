@@ -42,7 +42,7 @@ WINNING_NUMBERS = {7, 11}
 # ======================================================
 # 4. FONTS
 # ======================================================
-FONT_SMALL = pygame.font.SysFont(None, 24)
+FONT_SMALL = pygame.font.SysFont(None, 28)
 FONT_MEDIUM = pygame.font.SysFont(None, 34)
 FONT_LARGE = pygame.font.SysFont("Adrip1", 72)
 
@@ -86,8 +86,8 @@ roll_start_time = 0
 # 7. UI ELEMENTS (BUTTONS)
 # ======================================================
 ROLL_BUTTON = pygame.Rect(CENTER_X - 110, SCREEN_HEIGHT - 160, 220, 70)
-BET_PLUS_BUTTON = pygame.Rect(CENTER_X + 140, CENTER_Y + 110, 50, 50)
-BET_MINUS_BUTTON = pygame.Rect(CENTER_X - 190, CENTER_Y + 110, 50, 50)
+BET_PLUS_BUTTON = pygame.Rect(CENTER_X + 190, CENTER_Y + 110, 50, 50)
+BET_MINUS_BUTTON = pygame.Rect(CENTER_X - 240, CENTER_Y + 110, 50, 50)
 
 
 # ======================================================
@@ -110,7 +110,7 @@ def draw_button(rect, text, mouse_pos):
 
 def draw_die(x, y, value):
     pygame.draw.rect(screen, GOLD, (x - 6, y - 6, 112, 112), border_radius=16)
-    pygame.draw.rect(screen, WHITE, (x, y, 100, 100), border_radius=16)
+    pygame.draw.rect(screen, BLACK, (x, y, 100, 100), border_radius=16)
 
     positions = {
         "c":  (x + 50, y + 50),
@@ -132,7 +132,7 @@ def draw_die(x, y, value):
     }
 
     for key in pip_map[value]:
-        pygame.draw.circle(screen, BLACK, positions[key], 8)
+        pygame.draw.circle(screen, DIAMOND, positions[key], 8)
 
 
 # ======================================================
@@ -176,17 +176,36 @@ while running:
             rolling = False
             total = die_1 + die_2
 
-            if total in WINNING_NUMBERS:
+            # ------------------
+            # SNAKE EYES BONUS
+            # ------------------
+            if die_1 == 1 and die_2 == 1:
+                balance += current_bet * 10
+                wins += 1
+                result_text = "SNAKE EYES! 10x WIN!"
+                result_color = GREEN
+
+            # ------------------
+            # REGULAR WIN
+            # ------------------
+            elif total in WINNING_NUMBERS:
                 balance += current_bet
                 wins += 1
                 result_text = "YOU WIN!"
                 result_color = GREEN
+
+            # ------------------
+            # LOSS
+            # ------------------
             else:
                 balance -= current_bet
                 losses += 1
                 result_text = "YOU LOSE!"
                 result_color = RED
 
+            # ------------------
+            # OUT OF FUNDS CHECK
+            # ------------------
             if balance <= 0:
                 balance = 0
                 result_text = "OUT OF FUNDS"
@@ -218,7 +237,7 @@ while running:
     draw_die(CENTER_X - 140, CENTER_Y - 100, die_1)
     draw_die(CENTER_X + 40, CENTER_Y - 100, die_2)
 
-    title = FONT_LARGE.render("DIAMOND ROLL 💎", True, GOLD)
+    title = FONT_LARGE.render("DIAMOND ROLL", True, GOLD)
     screen.blit(title, title.get_rect(center=(CENTER_X, 60)))
 
     result = FONT_LARGE.render(result_text, True, result_color)
@@ -234,7 +253,7 @@ while running:
     )
     screen.blit(stats, stats.get_rect(center=(CENTER_X, CENTER_Y + 170)))
 
-    draw_button(ROLL_BUTTON, "ROLL 🎲", mouse_pos)
+    draw_button(ROLL_BUTTON, "ROLL", mouse_pos)
     draw_button(BET_PLUS_BUTTON, "+", mouse_pos)
     draw_button(BET_MINUS_BUTTON, "-", mouse_pos)
 
