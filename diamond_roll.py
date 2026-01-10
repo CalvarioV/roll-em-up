@@ -40,17 +40,23 @@ WINNING_NUMBERS = {7, 11}
 
 
 # ======================================================
+# 3.5 ASSET PATHS
+# ======================================================
+FONT_PATH = "assets/fonts/Dune_Rise.ttf"
+LOGO_PATH = "assets/images/Logo.png"
+
+# ======================================================
 # 4. FONTS
 # ======================================================
-FONT_SMALL = pygame.font.SysFont(None, 28)
-FONT_MEDIUM = pygame.font.SysFont(None, 34)
-FONT_LARGE = pygame.font.SysFont("Adrip1", 72)
+FONT_SMALL = pygame.font.Font(FONT_PATH, 18)
+FONT_MEDIUM = pygame.font.Font(FONT_PATH, 26)
+FONT_LARGE = pygame.font.Font(FONT_PATH, 48)
 
 
 # ======================================================
 # 5. BACKGROUND IMAGE + FADE OVERLAY
 # ======================================================
-logo_image = pygame.image.load("Logo.png").convert_alpha()
+logo_image = pygame.image.load(LOGO_PATH).convert_alpha()
 background = pygame.transform.smoothscale(
     logo_image, (SCREEN_WIDTH, SCREEN_HEIGHT)
 )
@@ -243,7 +249,7 @@ while running:
     result = FONT_LARGE.render(result_text, True, result_color)
     screen.blit(result, result.get_rect(center=(CENTER_X, CENTER_Y + 70)))
 
-    info = FONT_MEDIUM.render(
+    info = FONT_SMALL.render(
         f"Balance: ${balance}    Bet: ${current_bet}", True, WHITE
     )
     screen.blit(info, info.get_rect(center=(CENTER_X, CENTER_Y + 130)))
